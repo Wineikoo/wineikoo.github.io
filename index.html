@@ -340,6 +340,42 @@
     box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
   }
 
+  /* --- интерактивная рябь по клику --- */
+  .ripple {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    border: 2px solid var(--c1);
+    box-shadow: 0 0 16px var(--c1), inset 0 0 12px var(--c1);
+    transform: translate(-50%, -50%);
+  }
+  /* --- искрящийся след за курсором --- */
+  .trail {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    background: var(--c2);
+    box-shadow: 0 0 8px var(--c2);
+    transform: translate(-50%, -50%);
+  }
+  /* --- радужный режим (пасхалка) --- */
+  @keyframes rainbowHue {
+    0%   { filter: blur(60px) saturate(1.6) hue-rotate(0deg); }
+    100% { filter: blur(60px) saturate(1.6) hue-rotate(360deg); }
+  }
+  body.rainbow .bg {
+    animation: bgDrift 10s ease-in-out infinite alternate, rainbowHue 4s linear infinite;
+  }
+  body.rainbow .cursor-glow {
+    background: conic-gradient(from 0deg, #ff2e9a, #ff6ec7, #c724b1, #7b2ff7, #00e5ff, #2979ff, #ff2e9a);
+    animation: rainbowGlow 4s linear infinite;
+  }
+  @keyframes rainbowGlow {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
   .toast {
     position: fixed;
     left: 50%; bottom: 34px;
@@ -569,6 +605,65 @@
       if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) raf = requestAnimationFrame(follow);
       else raf = null;
     }
+
+    /* --- интерактивная рябь по клику по фону --- */
+    function ripple(x, y) {
+      const r = document.createElement('div');
+      r.className = 'ripple';
+      r.style.left = x + 'px';
+      r.style.top = y + 'px';
+      r.style.width = r.style.height = '18px';
+      document.body.appendChild(r);
+      r.animate([
+        { transform: 'translate(-50%,-50%) scale(1)', opacity: 0.9 },
+        { transform: 'translate(-50%,-50%) scale(16)', opacity: 0 }
+      ], { duration: 720, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => r.remove();
+      burst(x, y, 10, ACCENT, 90);
+    }
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.btn') || e.target.closest('.theme-toggle') ||
+          e.target.closest('.lang-toggle') || e.target.closest('.nick') ||
+          e.target.closest('a')) return;
+      ripple(e.clientX, e.clientY);
+    });
+
+    /* --- искрящийся след за курсором --- */
+    let lastTrail = 0;
+    window.addEventListener('pointermove', (e) => {
+      const now = (e.timeStamp || performance.now());
+      if (now - lastTrail < 55) return;
+      lastTrail = now;
+      const t = document.createElement('div');
+      t.className = 'trail';
+      const sz = 4 + Math.random() * 5;
+      t.style.width = t.style.height = sz + 'px';
+      t.style.left = e.clientX + 'px';
+      t.style.top = e.clientY + 'px';
+      document.body.appendChild(t);
+      const ox = Math.random() * 30 - 15, oy = Math.random() * 30 - 15;
+      t.animate([
+        { transform: 'translate(-50%,-50%) scale(1)', opacity: 0.8 },
+        { transform: `translate(-50%,-50%) translate(${ox}px,${oy}px) scale(0)`, opacity: 0 }
+      ], { duration: 600 + Math.random() * 400, easing: 'ease-out' }).onfinish = () => t.remove();
+    });
+
+    /* --- пасхалка: Konami code → радуга + конфетти --- */
+    const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let kPos = 0;
+    window.addEventListener('keydown', (e) => {
+      const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      kPos = (k === KONAMI[kPos]) ? kPos + 1 : (k === KONAMI[0] ? 1 : 0);
+      if (kPos === KONAMI.length) {
+        kPos = 0;
+        root.classList.toggle('rainbow');
+        const on = root.classList.contains('rainbow');
+        toast(on ? '🌈 радужный режим вкл!' : '🌸 радужный режим выкл');
+        if (on) {
+          for (let i = 0; i < 6; i++)
+            setTimeout(() => burst(Math.random() * innerWidth, Math.random() * innerHeight * 0.6, 28, null, 220), i * 110);
+        }
+      }
+    });
 
     /* --- звёзды-пылинки --- */
     const cv = document.getElementById('stars');
