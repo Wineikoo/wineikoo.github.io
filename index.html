@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>wineikoo — визитка</title>
+<meta name="theme-color" content="#ff2e9a" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="description" id="metaDesc" content="Визитка wineikoo — все контакты и ссылки в одном месте." />
+<meta property="og:type" content="profile" />
+<meta property="og:title" content="wineikoo" />
+<meta property="og:description" id="ogDesc" content="Визитка wineikoo — все контакты и ссылки в одном месте." />
+<meta property="og:image" content="icon.svg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="wineikoo" />
+<meta name="twitter:description" id="twDesc" content="Визитка wineikoo — все контакты и ссылки в одном месте." />
+<meta name="twitter:image" content="icon.svg" />
+<link rel="icon" href="icon.svg" />
+<link rel="apple-touch-icon" href="icon.svg" />
+<link rel="manifest" href="manifest.webmanifest" />
+<style>
+  :root {
+    --c1: #ff2e9a;  --c2: #ff6ec7;  --c3: #c724b1;  --c4: #7b2ff7;
+    --bg1: #1a0214; --bg2: #2b0726; --bg3: #3a0a30;
+    --b1: rgba(255, 46, 154, 0.40); --b2: rgba(123, 47, 247, 0.40); --b3: rgba(199, 36, 177, 0.45);
+    --d1: rgba(255, 110, 199, 0.55); --d2: rgba(123, 47, 247, 0.35);
+    --d3: rgba(255, 46, 154, 0.65);  --d4: rgba(199, 36, 177, 0.40);
+    --bs: rgba(255, 46, 154, 0.28);  --bsh: rgba(255, 46, 154, 0.5);
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-brd: rgba(255, 255, 255, 0.18);
+    --text: #fff0f8;
+  }
+  /* неоново-синяя тема */
+  [data-theme="blue"] {
+    --c1: #00e5ff;  --c2: #4dd0ff;  --c3: #2979ff;  --c4: #6200ea;
+    --bg1: #02101a; --bg2: #062236; --bg3: #0a2f4a;
+    --b1: rgba(0, 229, 255, 0.40);  --b2: rgba(98, 0, 234, 0.40); --b3: rgba(41, 121, 255, 0.45);
+    --d1: rgba(77, 208, 255, 0.55); --d2: rgba(98, 0, 234, 0.35);
+    --d3: rgba(0, 229, 255, 0.65);  --d4: rgba(41, 121, 255, 0.40);
+    --bs: rgba(0, 229, 255, 0.28);  --bsh: rgba(0, 229, 255, 0.5);
+    --text: #e8f7ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    min-height: 100vh;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: linear-gradient(160deg, var(--bg1), var(--bg2) 60%, var(--bg3));
+    background-attachment: fixed;
+    overflow-x: hidden;
+    position: relative;
+    transition: background 0.6s ease;
+  }
+
+  /* === необычный «живой» фон === */
+  .bg {
+    position: fixed;
+    inset: -25%;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 20% 25%, var(--b1), transparent 45%),
+      radial-gradient(circle at 80% 30%, var(--b2), transparent 45%),
+      radial-gradient(circle at 50% 85%, var(--b3), transparent 50%);
+    filter: blur(60px) saturate(1.2);
+    animation: bgDrift 22s ease-in-out infinite alternate,
+               bgHue 26s ease-in-out infinite alternate;
+  }
+  @keyframes bgDrift {
+    0%   { transform: scale(1)    translate(0, 0); }
+    100% { transform: scale(1.15) translate(-3%, 4%); }
+  }
+  @keyframes bgHue {
+    0%   { filter: blur(60px) saturate(1.1)  hue-rotate(0deg); }
+    100% { filter: blur(60px) saturate(1.4)  hue-rotate(42deg); }
+  }
+  .bg::before,
+  .bg::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(50px);
+  }
+  .bg::before {
+    width: 360px; height: 360px;
+    background: radial-gradient(circle, var(--c2), transparent 70%);
+    top: 12%; left: 16%;
+    animation: wander1 28s ease-in-out infinite;
+  }
+  .bg::after {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, var(--c4), transparent 70%);
+    bottom: 14%; right: 18%;
+    animation: wander2 32s ease-in-out infinite;
+  }
+  @keyframes wander1 {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(140px, 70px); }
+    50%  { transform: translate(70px, 180px); }
+    75%  { transform: translate(-90px, 90px); }
+    100% { transform: translate(0, 0); }
+  }
+  @keyframes wander2 {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(-120px, 90px); }
+    50%  { transform: translate(80px, -60px); }
+    75%  { transform: translate(100px, 120px); }
+    100% { transform: translate(0, 0); }
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  #stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .cursor-glow {
+    position: fixed;
+    top: 0; left: 0;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--d1), var(--d2) 40%, transparent 70%);
+    filter: blur(40px);
+    mix-blend-mode: screen;
+    transition: background 0.4s ease;
+  }
+  .cursor-glow.move {
+    background: radial-gradient(circle, var(--d3), var(--d4) 45%, transparent 72%);
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatar-float {
+    perspective: 700px;
+    animation: bob 4s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .avatar-tilt {
+    transition: transform 0.2s ease;
+    transform-style: preserve-3d;
+  }
+  .avatar-ring {
+    position: relative;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    padding: 4px;
+    background: conic-gradient(from 0deg, var(--c1), var(--c4), var(--c3), var(--c2), var(--c1));
+    animation: spin 16s linear infinite, halo 3s ease-in-out infinite;
+    box-shadow: 0 0 28px rgba(255, 46, 154, 0.55),
+                0 0 60px rgba(123, 47, 247, 0.45);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes halo {
+    0%, 100% { box-shadow: 0 0 22px rgba(255,46,154,0.5), 0 0 48px rgba(123,47,247,0.4); }
+    50% { box-shadow: 0 0 38px rgba(255,46,154,0.85), 0 0 80px rgba(199,36,177,0.6); }
+  }
+  .avatar {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--c1), var(--c4));
+    overflow: hidden;
+    animation: pop 0.8s cubic-bezier(.2,.9,.3,1.4) both, counter-spin 16s linear infinite;
+  }
+  @keyframes counter-spin { to { transform: rotate(-360deg); } }
+  .avatar-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+  }
+  .avatar-text { display: none; }
+  .avatar.fallback .avatar-text { display: block; }
+  .avatar.fallback .avatar-img { display: none; }
+  @keyframes pop {
+    from { transform: scale(0.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .nick {
+    margin-top: 22px;
+    font-size: clamp(40px, 9vw, 68px);
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    background: linear-gradient(90deg, var(--c2), #fff, var(--c1), var(--c2));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 6s linear infinite;
+    filter: drop-shadow(0 4px 24px rgba(255, 110, 199, 0.5));
+    cursor: pointer;
+    user-select: none;
+  }
+  @keyframes shine { to { background-position: 300% 0; } }
+
+  .tagline {
+    margin-top: 14px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(255, 240, 248, 0.78);
+    max-width: 460px;
+  }
+  .tagline b { color: var(--c2); font-weight: 700; }
+
+  .about {
+    margin-top: 22px;
+    width: 100%;
+    max-width: 520px;
+    padding: 18px 22px;
+    border-radius: 18px;
+    background: var(--glass);
+    border: 1px solid var(--glass-brd);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 240, 248, 0.82);
+  }
+  .about b { color: var(--c2); }
+  .about .row { display: flex; flex-wrap: wrap; gap: 8px 14px; justify-content: center; margin-top: 10px; }
+  .about .chip {
+    font-size: 13px; font-weight: 700;
+    padding: 5px 12px; border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-brd);
+  }
+
+  .links {
+    margin-top: 38px;
+    width: 100%;
+    display: grid;
+    gap: 14px;
+  }
+  .btn {
+    --c1: var(--c1); --c2: var(--c3);
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    border: 1px solid var(--glass-brd);
+    box-shadow: 0 10px 30px var(--bs);
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(.2,.8,.3,1),
+                box-shadow 0.25s ease;
+  }
+  .btn .ico { width: 22px; height: 22px; object-fit: contain; flex: 0 0 auto; font-size: 20px; line-height: 1; }
+  .btn .label { flex: 1; text-align: left; }
+  .btn .handle { font-weight: 500; opacity: 0.85; font-size: 14px; }
+
+  .btn::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -130%;
+    width: 70%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.45), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+  }
+  .btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 16px 44px var(--bsh);
+  }
+  .btn:hover::after { left: 130%; }
+  .btn:active { transform: translateY(-1px) scale(0.99); }
+
+  .btn.telegram { --c1: #ff3ea5; --c2: #b1219b; }
+  .btn.github   { --c1: #ff5fb0; --c2: #7b2ff7; }
+  .btn.discord  { --c1: #ff2e9a; --c2: #8a1fd4; }
+  .btn.osu      { --c1: #ff5fb0; --c2: #ff2e9a; }
+  .btn.steam    { --c1: #c724b1; --c2: #7b2ff7; }
+  .btn.youtube  { --c1: #ff2e9a; --c2: #c724b1; }
+  .btn.twitch   { --c1: #a020f0; --c2: #ff2e9a; }
+
+  .theme-toggle, .lang-toggle {
+    position: fixed;
+    top: 18px;
+    z-index: 30;
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-brd);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .theme-toggle { right: 18px; }
+  .lang-toggle { right: 74px; font-size: 14px; font-weight: 800; }
+  .theme-toggle:hover, .lang-toggle:hover { transform: scale(1.1) rotate(20deg); }
+
+  .spark {
+    position: fixed;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 60;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%; bottom: 34px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--glass);
+    border: 1px solid var(--glass-brd);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 70;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  footer {
+    margin-top: 56px;
+    font-size: 13px;
+    color: rgba(255, 240, 248, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+  footer a { color: var(--c2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .views b { color: var(--c2); }
+</style>
+</head>
+<body>
+  <div class="bg"></div>
+  <canvas id="stars"></canvas>
+  <div class="cursor-glow" id="cursorGlow"></div>
+  <button class="lang-toggle" id="langToggle" title="Сменить язык">EN</button>
+  <button class="theme-toggle" id="themeToggle" title="Сменить тему">🌸</button>
+
+  <main class="wrap">
+    <div class="avatar-float">
+      <div class="avatar-tilt">
+        <div class="avatar-ring">
+          <div class="avatar">
+            <img src="https://a.ppy.sh/17249530"
+                 alt="wineikoo" class="avatar-img"
+                 onerror="this.style.display='none';this.parentNode.classList.add('fallback')" />
+            <span class="avatar-text">wi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="nick" title="Клик — скопировать ник">wineikoo</h1>
+    <p class="tagline" data-i18n="tagline" data-html="1"></p>
+
+    <section class="about">
+      <div data-i18n="about" data-html="1"></div>
+      <div class="row">
+        <span class="chip" data-i18n="chip_code">💻 кодю</span>
+        <span class="chip" data-i18n="chip_osu">🎯 osu!</span>
+        <span class="chip" data-i18n="chip_stream">🔴 стримлю</span>
+        <span class="chip" data-i18n="chip_everywhere">🌸 wineikoo везде</span>
+      </div>
+    </section>
+
+    <nav class="links">
+      <a class="btn telegram" href="https://t.me/wineikoo" target="_blank" rel="noopener">
+        <img class="ico" src="https://cdn.simpleicons.org/telegram/ffffff" alt="Telegram" onerror="this.outerHTML='✈️'" />
+        <span class="label"><span data-i18n="telegram">Telegram</span><span class="handle"> @wineikoo</span></span>
+      </a>
+      <a class="btn github" href="https://github.com/wineikoo" target="_blank" rel="noopener">
+        <img class="ico" src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub" onerror="this.outerHTML='🐙'" />
+        <span class="label"><span data-i18n="github">GitHub</span><span class="handle"> /wineikoo</span></span>
+      </a>
+      <a class="btn discord" href="https://discord.com/users/wineikoo" target="_blank" rel="noopener">
+        <img class="ico" src="https://cdn.simpleicons.org/discord/ffffff" alt="Discord" onerror="this.outerHTML='💬'" />
+        <span class="label"><span data-i18n="discord">Discord</span><span class="handle"> wineikoo</span></span>
+      </a>
+      <a class="btn osu" href="https://osu.ppy.sh/users/wineikoo" target="_blank" rel="noopener">
+        <img class="ico" src="https://cdn.simpleicons.org/osu/ffffff" alt="osu!" onerror="this.outerHTML='🍓'" />
+        <span class="label"><span data-i18n="osu">osu!</span><span class="handle"> /wineikoo</span></span>
+      </a>
+      <a class="btn steam" href="https://steamcommunity.com/id/AkameLaKill/" target="_blank" rel="noopener">
+        <img class="ico" src="https://cdn.simpleicons.org/steam/ffffff" alt="Steam" onerror="this.outerHTML='🕹️'" />
+        <span class="label"><span data-i18n="steam">Steam</span><span class="handle"> /AkameLaKill</span></span>
+      </a>
+      <a class="btn youtube" href="https://www.youtube.com/@Wineikoo" target="_blank" rel="noopener">
+        <img class="ico" src="https://cdn.simpleicons.org/youtube/ffffff" alt="YouTube" onerror="this.outerHTML='▶️'" />
+        <span class="label"><span data-i18n="youtube">YouTube</span><span class="handle"> @Wineikoo</span></span>
+      </a>
+      <a class="btn twitch" href="https://www.twitch.tv/wineikoo" target="_blank" rel="noopener">
+        <img class="ico" src="https://cdn.simpleicons.org/twitch/ffffff" alt="Twitch" onerror="this.outerHTML='🟣'" />
+        <span class="label"><span data-i18n="twitch">Twitch</span><span class="handle"> /wineikoo</span></span>
+      </a>
+    </nav>
+
+    <footer>
+      <span data-i18n="thanks">Спасибо за внимание 💖</span><a href="#">wineikoo</a>
+      <span class="views">👀 <b id="views">0</b> <span data-i18n="views">просмотров</span></span>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "wineikoo",
+    "url": "https://osu.ppy.sh/users/wineikoo",
+    "sameAs": [
+      "https://t.me/wineikoo",
+      "https://github.com/wineikoo",
+      "https://discord.com/users/wineikoo",
+      "https://osu.ppy.sh/users/wineikoo",
+      "https://steamcommunity.com/id/AkameLaKill/",
+      "https://www.youtube.com/@Wineikoo",
+      "https://www.twitch.tv/wineikoo"
+    ]
+  }
+  </script>
+
+  <script>
+    const root = document.documentElement;
+    let ACCENT = [];
+
+    /* --- локализация RU / EN --- */
+    const I18N = {
+      ru: {
+        tagline: 'Привет, я <b>wineikoo</b>. Добро пожаловать на мою визитку — тут собраны все мои контакты в один клик.',
+        about: '🎮 Геймер, osu-маньяк и просто хороший человек. Стримлю, кодю и катю рейтинг.',
+        chip_code: '💻 кодю', chip_osu: '🎯 osu!', chip_stream: '🔴 стримлю', chip_everywhere: '🌸 wineikoo везде',
+        telegram: 'Telegram', github: 'GitHub', discord: 'Discord', osu: 'osu!', steam: 'Steam', youtube: 'YouTube', twitch: 'Twitch',
+        lang: 'EN', theme_title: 'Сменить тему', lang_title: 'Сменить язык', nick_title: 'Клик — скопировать ник',
+        copy: 'Скопировано: wineikoo', thanks: 'Спасибо за внимание 💖', views: 'просмотров',
+        desc: 'Визитка wineikoo — все контакты и ссылки в одном месте: Telegram, GitHub, Discord, osu!, Steam, YouTube, Twitch.'
+      },
+      en: {
+        tagline: "Hi, I'm <b>wineikoo</b>. Welcome to my card — all my contacts in one click.",
+        about: '🎮 Gamer, osu! maniac and just a good person. I stream, code and grind rank.',
+        chip_code: '💻 code', chip_osu: '🎯 osu!', chip_stream: '🔴 stream', chip_everywhere: '🌸 wineikoo everywhere',
+        telegram: 'Telegram', github: 'GitHub', discord: 'Discord', osu: 'osu!', steam: 'Steam', youtube: 'YouTube', twitch: 'Twitch',
+        lang: 'RU', theme_title: 'Switch theme', lang_title: 'Switch language', nick_title: 'Click — copy nickname',
+        copy: 'Copied: wineikoo', thanks: 'Thanks for watching 💖', views: 'views',
+        desc: "wineikoo's card — all contacts and links in one place: Telegram, GitHub, Discord, osu!, Steam, YouTube, Twitch."
+      }
+    };
+    const langBtn = document.getElementById('langToggle');
+    const metaDesc = document.getElementById('metaDesc');
+    const ogDesc = document.getElementById('ogDesc');
+    const twDesc = document.getElementById('twDesc');
+    function applyLang(lang) {
+      root.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        const val = (I18N[lang] && I18N[lang][key] != null) ? I18N[lang][key] : I18N.ru[key];
+        if (el.hasAttribute('data-html')) el.innerHTML = val;
+        else el.textContent = val;
+      });
+      langBtn.textContent = I18N[lang].lang;
+      const d = I18N[lang].desc;
+      if (metaDesc) metaDesc.content = d;
+      if (ogDesc) ogDesc.content = d;
+      if (twDesc) twDesc.content = d;
+    }
+    let lang = localStorage.getItem('wko-lang');
+    if (!lang) lang = (navigator.language || 'ru').startsWith('en') ? 'en' : 'ru';
+    applyLang(lang);
+    langBtn.addEventListener('click', () => {
+      lang = (lang === 'ru') ? 'en' : 'ru';
+      localStorage.setItem('wko-lang', lang);
+      applyLang(lang);
+      const r = langBtn.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + r.height / 2, 18, ACCENT, 130);
+    });
+
+    function readAccent() {
+      const cs = getComputedStyle(root);
+      ACCENT = [
+        cs.getPropertyValue('--c1').trim(),
+        cs.getPropertyValue('--c2').trim(),
+        cs.getPropertyValue('--c3').trim(),
+        cs.getPropertyValue('--c4').trim()
+      ].filter(Boolean);
+    }
+
+    /* --- тема --- */
+    const saved = localStorage.getItem('wko-theme');
+    if (saved === 'blue') root.setAttribute('data-theme', 'blue');
+    readAccent();
+    const toggle = document.getElementById('themeToggle');
+    function syncToggle() {
+      toggle.textContent = root.getAttribute('data-theme') === 'blue' ? '💎' : '🌸';
+    }
+    function updateThemeColor() {
+      const m = document.querySelector('meta[name=theme-color]');
+      if (m) m.setAttribute('content', root.getAttribute('data-theme') === 'blue' ? '#02101a' : '#ff2e9a');
+    }
+    syncToggle(); updateThemeColor();
+    toggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'blue' ? 'pink' : 'blue';
+      if (next === 'blue') root.setAttribute('data-theme', 'blue');
+      else root.removeAttribute('data-theme');
+      localStorage.setItem('wko-theme', next);
+      readAccent(); syncToggle(); updateThemeColor();
+      const r = toggle.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + r.height / 2, 26, ACCENT, 170);
+    });
+
+    /* --- свечение за курсором --- */
+    const glow = document.getElementById('cursorGlow');
+    let raf = null, tx = 0, ty = 0, cx = 0, cy = 0;
+    window.addEventListener('pointermove', (e) => {
+      tx = e.clientX; ty = e.clientY;
+      glow.classList.add('move');
+      if (!raf) raf = requestAnimationFrame(follow);
+    });
+    window.addEventListener('pointerleave', () => glow.classList.remove('move'));
+    function follow() {
+      cx += (tx - cx) * 0.15;
+      cy += (ty - cy) * 0.15;
+      glow.style.left = cx + 'px';
+      glow.style.top = cy + 'px';
+      if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) raf = requestAnimationFrame(follow);
+      else raf = null;
+    }
+
+    /* --- звёзды-пылинки --- */
+    const cv = document.getElementById('stars');
+    const ctx = cv.getContext('2d');
+    let parts = [];
+    function resize() { cv.width = innerWidth; cv.height = innerHeight; }
+    resize(); addEventListener('resize', resize);
+    function newStar(rand) {
+      return {
+        x: Math.random() * innerWidth,
+        y: rand ? Math.random() * innerHeight : innerHeight + 10,
+        r: Math.random() * 2 + 0.6,
+        s: Math.random() * 0.5 + 0.2,
+        a: Math.random() * 0.5 + 0.2
+      };
+    }
+    function initStars() {
+      parts = [];
+      const n = Math.min(70, Math.floor(innerWidth / 18));
+      for (let i = 0; i < n; i++) parts.push(newStar(true));
+    }
+    function drawStars() {
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      const col = ACCENT[0] || '#ff6ec7';
+      for (const p of parts) {
+        p.y -= p.s;
+        if (p.y < -10) Object.assign(p, newStar(false));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = col;
+        ctx.globalAlpha = p.a;
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(drawStars);
+    }
+    initStars(); drawStars();
+
+    /* --- искры / конфетти --- */
+    function burst(x, y, count, colors, power) {
+      colors = (colors && colors.length) ? colors : ACCENT;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'spark';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.background = colors[i % colors.length] || '#ff6ec7';
+        const sz = 6 + Math.random() * 6;
+        p.style.width = p.style.height = sz + 'px';
+        document.body.appendChild(p);
+        const ang = Math.random() * Math.PI * 2;
+        const dist = power * (0.4 + Math.random() * 0.8);
+        const dx = Math.cos(ang) * dist;
+        const dy = Math.sin(ang) * dist - power * 0.4;
+        const rot = Math.random() * 720 - 360;
+        p.animate([
+          { transform: 'translate(-50%,-50%) translate(0,0) rotate(0deg)', opacity: 1 },
+          { transform: `translate(-50%,-50%) translate(${dx}px,${dy}px) rotate(${rot}deg)`, opacity: 0 }
+        ], { duration: 700 + Math.random() * 600, easing: 'cubic-bezier(.15,.7,.3,1)' })
+          .onfinish = () => p.remove();
+      }
+    }
+
+    /* --- кнопки: искры при наведении, конфетти при клике --- */
+    document.querySelectorAll('.btn').forEach((b) => {
+      b.addEventListener('mouseenter', () => {
+        const r = b.getBoundingClientRect();
+        burst(r.left + 30, r.top + r.height / 2, 5, ACCENT, 70);
+      });
+      b.addEventListener('click', (e) => {
+        burst(e.clientX, e.clientY, 26, ACCENT, 180);
+      });
+    });
+
+    /* --- аватар: 3D-наклон к курсору --- */
+    const floatEl = document.querySelector('.avatar-float');
+    const tiltEl = document.querySelector('.avatar-tilt');
+    floatEl.addEventListener('mousemove', (e) => {
+      const r = floatEl.getBoundingClientRect();
+      const px = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      const py = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      tiltEl.style.transform = `rotateY(${px * 16}deg) rotateX(${-py * 16}deg)`;
+    });
+    floatEl.addEventListener('mouseleave', () => {
+      tiltEl.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    });
+
+    /* --- копирование ника --- */
+    const nick = document.querySelector('.nick');
+    const toastEl = document.getElementById('toast');
+    let toastT;
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastT);
+      toastT = setTimeout(() => toastEl.classList.remove('show'), 1600);
+    }
+    nick.addEventListener('click', () => {
+      navigator.clipboard && navigator.clipboard.writeText('wineikoo');
+      const r = nick.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top, 14, ACCENT, 120);
+      toast(I18N[lang].copy);
+    });
+
+    /* --- счётчик просмотров --- */
+    const viewsEl = document.getElementById('views');
+    let v = parseInt(localStorage.getItem('wko-views') || '0', 10);
+    v++; localStorage.setItem('wko-views', v);
+    viewsEl.textContent = v;
+
+    /* --- появление кнопок по очереди --- */
+    document.querySelectorAll('.links .btn').forEach((b, i) => {
+      b.style.opacity = '0';
+      b.style.transform = 'translateY(22px)';
+      setTimeout(() => {
+        b.style.transition = 'opacity .55s ease, transform .55s ease, box-shadow .25s ease';
+        b.style.opacity = '1';
+        b.style.transform = '';
+      }, 250 + i * 90);
+    });
+  </script>
+</body>
+</html>

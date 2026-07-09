@@ -1,0 +1,12 @@
+{
+  "name": "wineikoo",
+  "short_name": "wineikoo",
+  "description": "Визитка wineikoo — все контакты и ссылки в одном месте.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a0214",
+  "theme_color": "#ff2e9a",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
