@@ -21,10 +21,13 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <script src="script.js?v=2" defer></script>
+  <script src="effects.js" defer></script>
 </head>
 <body>
+  <div class="sky" aria-hidden="true"></div>
+  <canvas class="particles" aria-hidden="true"></canvas>
   <header class="site-header shell">
     <a class="brand" href="#top">
       <img src="icon.svg" alt="" width="32" height="32">
@@ -33,7 +36,11 @@
     <div class="preferences">
       <button class="preference" type="button" id="theme-toggle" aria-pressed="false" hidden>
         <span class="theme-swatch" aria-hidden="true"></span>
-        <span data-i18n="theme">Синяя тема</span>
+        <span class="preference-label" data-i18n="theme">Синяя тема</span>
+      </button>
+      <button class="preference" type="button" id="effects-toggle" aria-pressed="false" hidden>
+        <span class="effects-icon" aria-hidden="true"></span>
+        <span class="preference-label" data-i18n="effects">Эффекты</span>
       </button>
       <button class="preference language" type="button" id="lang-toggle" lang="en" aria-label="Switch to English" hidden>EN</button>
     </div>
@@ -41,6 +48,7 @@
 
   <main class="shell">
     <section class="hero" aria-labelledby="nickname">
+      <div class="hero-energy" aria-hidden="true"><div class="hero-grid"></div></div>
       <div class="hero-intro">
         <h1 id="nickname">wineikoo</h1>
         <p data-i18n="intro">Разработчик, стример и игрок в osu!mania.</p>
@@ -55,12 +63,13 @@
           </button>
         </div>
       </div>
-      <div class="hero-art" aria-hidden="true">
+      <div class="hero-art">
         <div class="portrait">
-          <span class="portrait-spark"></span>
-          <div class="portrait-frame">
+          <span class="orbit orbit-pink" aria-hidden="true"><span class="orbit-runner"></span></span>
+          <span class="orbit orbit-blue" aria-hidden="true"><span class="orbit-runner"></span></span>
+          <button class="portrait-frame" type="button" aria-label="Запустить вспышку" title="Запустить вспышку" aria-hidden="true" disabled>
             <img src="assets/avatar.jpg" alt="" width="256" height="256" fetchpriority="high">
-          </div>
+          </button>
         </div>
       </div>
     </section>

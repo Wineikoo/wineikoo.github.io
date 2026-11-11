@@ -33,6 +33,7 @@
   --mesh-cyan: #00f0ff;
   --rim: #ff006e;
   --ease-out: cubic-bezier(.23, 1, .32, 1);
+  --ease-in-out: cubic-bezier(.77, 0, .175, 1);
 }
 
 :root[data-theme="blue"] {
@@ -76,12 +77,46 @@ html {
 
 body {
   min-height: 100vh;
+  isolation: isolate;
   margin: 0;
   padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   color: var(--text);
   background:
     radial-gradient(ellipse at 82% 0, color-mix(in srgb, var(--mesh-violet) 20%, transparent), transparent 42rem),
     linear-gradient(var(--page), var(--page-end));
+}
+
+.sky,
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sky {
+  z-index: -1;
+  overflow: clip;
+}
+
+.sky::before {
+  content: "";
+  position: absolute;
+  inset: -20% -15%;
+  background:
+    radial-gradient(ellipse at 9% 74%, color-mix(in srgb, var(--mesh-violet) 36%, transparent), transparent 38%),
+    radial-gradient(ellipse at 88% 37%, color-mix(in srgb, var(--mesh-pink) 39%, transparent), transparent 34%),
+    radial-gradient(ellipse at 92% 91%, color-mix(in srgb, var(--mesh-cyan) 22%, transparent), transparent 36%);
+}
+
+.particles {
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+[data-motion="on"] .particles {
+  display: block;
 }
 
 a {
@@ -165,6 +200,18 @@ button {
   background: linear-gradient(135deg, #a4ecff, #5981ff);
 }
 
+.effects-icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  background: var(--accent);
+  clip-path: polygon(50% 0, 61% 37%, 100% 50%, 61% 63%, 50% 100%, 39% 63%, 0 50%, 39% 37%);
+}
+
+#effects-toggle[aria-pressed="false"] .effects-icon {
+  background: var(--muted);
+}
+
 .preference[aria-pressed="true"] {
   border-color: color-mix(in srgb, var(--accent) 64%, var(--border));
 }
@@ -186,6 +233,60 @@ button {
     radial-gradient(ellipse at 80% 113%, color-mix(in srgb, var(--mesh-cyan) 48%, transparent), transparent 50%),
     radial-gradient(ellipse at 69% 69%, var(--mesh-violet), transparent 78%),
     var(--hero-base);
+}
+
+.hero-energy {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+  mask-image: linear-gradient(100deg, transparent 5%, #0005 44%, #000 77%);
+}
+
+.hero-energy::before,
+.hero-energy::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hero-energy::before {
+  inset: -46% -12% -48% 25%;
+  opacity: .9;
+  background: conic-gradient(
+    from 115deg at 54% 49%, transparent 0 5%, var(--mesh-cyan) 13%, transparent 25% 36%,
+    var(--rim) 49%, transparent 60% 68%, var(--mesh-violet) 79%, transparent 91% 100%
+  );
+  filter: blur(24px);
+  transform: rotate(-16deg) scaleY(.8);
+}
+
+.hero-energy::after {
+  inset: -50% -23% -44% 26%;
+  opacity: .68;
+  background: repeating-radial-gradient(
+    ellipse at 55% 47%, transparent 0 7%, color-mix(in srgb, var(--accent) 80%, transparent) 8%,
+    color-mix(in srgb, var(--rim) 54%, transparent) 9%, transparent 11% 17%
+  );
+  mask-image: conic-gradient(from 40deg, transparent, #000 14%, transparent 40%, #000 71%, transparent 91%);
+  transform: rotate(-27deg) scaleY(.58);
+}
+
+.rainbow .hero-energy::before {
+  background: conic-gradient(
+    from 115deg, #ff4c8d, #ffc55d, #83ffb5, #24e8ff, #8656ff, #ff4c8d
+  );
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 24% -35% -76% -35%;
+  opacity: .33;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 37px, color-mix(in srgb, var(--accent) 54%, transparent) 39px 40px),
+    repeating-linear-gradient(90deg, transparent 0 52px, color-mix(in srgb, var(--accent) 38%, transparent) 53px 54px);
+  mask-image: linear-gradient(transparent 26%, #000 70%);
+  transform: perspective(440px) rotateX(54deg) rotateZ(-10deg) translateY(0);
 }
 
 .hero-intro {
@@ -252,33 +353,51 @@ button {
   aspect-ratio: 1;
 }
 
-.portrait::before,
-.portrait::after {
+.orbit {
+  position: absolute;
+  inset: -22%;
+  color: var(--accent);
+  border: 1.5px solid color-mix(in srgb, currentColor 65%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 16px color-mix(in srgb, currentColor 60%, transparent),
+    inset 0 0 12px color-mix(in srgb, currentColor 34%, transparent);
+  transform: rotate(-29deg) scaleY(.49);
+  pointer-events: none;
+}
+
+.orbit-blue {
+  inset: -27%;
+  color: var(--mesh-cyan);
+  opacity: .64;
+  transform: rotate(25deg) scaleY(.52);
+}
+
+.orbit-runner {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  transform: rotate(60deg);
+}
+
+.orbit-runner::before {
   content: "";
   position: absolute;
-  width: 148%;
-  height: 69%;
-  border: 1px solid color-mix(in srgb, var(--accent) 68%, transparent);
-  border-radius: 50%;
-  transform: rotate(-26deg);
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(from -48deg, transparent, currentColor 12%, transparent 14% 100%);
+  mask-image: radial-gradient(transparent 67%, #000 69% 71%, transparent 72%);
 }
 
-.portrait::after {
-  width: 166%;
-  height: 76%;
-  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
-}
-
-.portrait-spark {
+.orbit-runner::after {
+  content: "";
   position: absolute;
-  z-index: 1;
-  top: 18%;
-  right: -12%;
-  width: 9px;
-  height: 9px;
+  top: -4px;
+  left: calc(50% - 5px);
+  width: 10px;
+  height: 13px;
   border-radius: 50%;
-  background: var(--text);
-  box-shadow: 0 0 16px 3px var(--accent);
+  background: #fff7ff;
+  box-shadow: 0 0 13px 5px currentColor;
 }
 
 .portrait-frame {
@@ -288,9 +407,27 @@ button {
   width: 100%;
   aspect-ratio: 1;
   padding: 4px;
+  overflow: hidden;
+  isolation: isolate;
+  border: 0;
   border-radius: 50%;
-  background: conic-gradient(from 35deg, var(--accent), var(--rim), var(--mesh-violet), var(--mesh-cyan), var(--accent));
-  box-shadow: 0 0 46px color-mix(in srgb, var(--accent) 36%, transparent);
+  background: #130c21;
+  box-shadow: 0 0 52px color-mix(in srgb, var(--accent) 51%, transparent);
+}
+
+.portrait-frame:disabled {
+  cursor: default;
+}
+
+.portrait-frame::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 35deg, var(--accent), var(--rim), var(--mesh-violet), var(--mesh-cyan), var(--accent)
+  );
 }
 
 .portrait-frame img {
@@ -496,7 +633,7 @@ button {
 
 .toast {
   position: fixed;
-  z-index: 2;
+  z-index: 4;
   left: 50%;
   bottom: max(20px, env(safe-area-inset-bottom));
   width: max-content;
@@ -519,6 +656,121 @@ button {
 .toast[data-visible] {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+[data-motion="on"] .sky::before {
+  animation: sky-drift 9s ease-in-out infinite alternate;
+}
+
+[data-motion="on"] .hero-energy::before {
+  animation: aurora-spin 12s linear infinite;
+}
+
+[data-motion="on"] .hero-energy::after {
+  animation: aurora-sweep 6s var(--ease-in-out) infinite alternate;
+}
+
+[data-motion="on"] .hero-grid {
+  animation: grid-drift 3s linear infinite;
+}
+
+[data-motion="on"] .portrait {
+  animation: float-portrait 4s ease-in-out infinite;
+}
+
+[data-motion="on"] .orbit-pink .orbit-runner {
+  animation: orbit-spin 3.8s linear infinite;
+}
+
+[data-motion="on"] .orbit-blue .orbit-runner {
+  animation: orbit-spin 5.7s linear -2s infinite reverse;
+}
+
+[data-motion="on"] .portrait-frame::before {
+  animation: orbit-spin 6s linear infinite;
+}
+
+[data-motion="on"].motion-intro .hero h1 {
+  animation: title-arrival 640ms var(--ease-out) backwards;
+}
+
+[data-motion="on"].motion-intro .hero p {
+  animation: slide-in 540ms var(--ease-out) 120ms backwards;
+}
+
+[data-motion="on"].motion-intro .hero-actions {
+  animation: slide-in 470ms var(--ease-out) 205ms backwards;
+}
+
+[data-motion="on"].motion-intro .hero-art {
+  animation: portrait-arrival 700ms var(--ease-out) 95ms backwards;
+}
+
+[data-motion="on"] .directory.group-arrival .link-group {
+  animation: slide-in 480ms var(--ease-out) backwards;
+}
+
+[data-motion="on"] .directory.group-arrival .link-group:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+[data-motion="on"] .directory.group-arrival .link-group:nth-child(3) {
+  animation-delay: 115ms;
+}
+
+[data-motion="on"] .directory.group-arrival:focus-within .link-group {
+  animation: none;
+}
+
+[data-motion="on"].motion-paused .sky::before,
+[data-motion="on"] .hero[data-outside] :is(.hero-energy, .portrait-frame)::before,
+[data-motion="on"] .hero[data-outside] .hero-energy::after,
+[data-motion="on"] .hero[data-outside] :is(.hero-grid, .portrait, .orbit-runner) {
+  animation-play-state: paused;
+}
+
+@keyframes sky-drift {
+  from { transform: translate3d(-6%, 3%, 0) rotate(-6deg); }
+  to { transform: translate3d(8%, -8%, 0) rotate(10deg) scale(1.1); }
+}
+
+@keyframes aurora-spin {
+  from { transform: scaleY(.8) rotate(0turn); }
+  to { transform: scaleY(.8) rotate(1turn); }
+}
+
+@keyframes aurora-sweep {
+  from { transform: translate(-6%, -8%) rotate(-35deg) scaleY(.45); opacity: .28; }
+  to { transform: translate(8%, 11%) rotate(12deg) scaleY(.77); opacity: .83; }
+}
+
+@keyframes grid-drift {
+  to { transform: perspective(440px) rotateX(54deg) rotateZ(-10deg) translateY(40px); }
+}
+
+@keyframes float-portrait {
+  0%, 100% { transform: translateY(4px) rotate(-2deg); }
+  50% { transform: translateY(-13px) rotate(3deg); }
+}
+
+@keyframes orbit-spin {
+  from { transform: rotate(0turn); }
+  to { transform: rotate(1turn); }
+}
+
+@keyframes title-arrival {
+  from { transform: translateY(34px) scale(.93) skewY(-3deg); opacity: 0; }
+  to { transform: translateY(0) scale(1) skewY(0); opacity: 1; }
+}
+
+@keyframes slide-in {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes portrait-arrival {
+  from { transform: translateX(32px) scale(.91) rotate(-9deg); opacity: 0; }
+  to { transform: translateX(0) scale(1) rotate(0); opacity: 1; }
 }
 
 .action:active,
@@ -553,6 +805,37 @@ a.link-card:active {
   .action-secondary:hover {
     background: #3a2253;
   }
+
+  [data-motion="on"] a.link-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  [data-motion="on"] a.link-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(112deg, transparent 26%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 71%);
+    transform: translateX(-105%);
+    transition: transform 280ms var(--ease-out);
+    pointer-events: none;
+  }
+
+  [data-motion="on"] a.link-card:hover:not(:active) {
+    transform: translateY(-4px) scale(1.012);
+  }
+
+  [data-motion="on"] a.link-card:hover::after {
+    transform: translateX(105%);
+  }
+
+  [data-motion="on"] .portrait-frame img {
+    transition: transform 200ms var(--ease-out);
+  }
+
+  [data-motion="on"] .portrait-frame:hover img {
+    transform: scale(1.035);
+  }
 }
 
 @media (max-width: 850px) {
@@ -567,6 +850,10 @@ a.link-card:active {
 }
 
 @media (max-width: 680px) {
+  .sky::before {
+    inset-inline: -35%;
+  }
+
   .shell {
     width: calc(100% - 32px);
   }
@@ -603,6 +890,15 @@ a.link-card:active {
     letter-spacing: -.065em;
   }
 
+  .hero-energy {
+    mask-image: linear-gradient(transparent 15%, #0004 42%, #000 75%);
+  }
+
+  .hero-energy::before,
+  .hero-energy::after {
+    inset: 26% -55% -48%;
+  }
+
   .hero p {
     margin: 17px auto 0;
   }
@@ -628,6 +924,22 @@ a.link-card:active {
   .link-groups {
     grid-template-columns: minmax(0, 1fr);
     gap: 23px;
+  }
+}
+
+@media (max-width: 490px) {
+  .preference {
+    min-width: 44px;
+  }
+
+  .preference-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 

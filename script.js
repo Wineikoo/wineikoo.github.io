@@ -1,6 +1,9 @@
 const root = document.documentElement;
 const themeToggle = document.getElementById('theme-toggle');
+const effectsToggle = document.getElementById('effects-toggle');
 const langToggle = document.getElementById('lang-toggle');
+const portraitButton = document.querySelector('.portrait-frame');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const themeColor = document.querySelector('meta[name="theme-color"]');
 const descriptions = [...document.querySelectorAll(
   'meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]'
@@ -20,6 +23,7 @@ const english = {
   telegram: 'Message me on Telegram',
   copyNick: 'Copy nickname',
   theme: 'Blue theme',
+  effects: 'Effects',
   directory: 'Find me online',
   contact: 'Contacts and code',
   media: 'Streams and videos',
@@ -32,6 +36,7 @@ const english = {
 
 const messages = {
   ru: {
+    burst: 'Запустить вспышку',
     discordCopy: 'Скопировать имя в Discord',
     copied: 'Скопировано:',
     manual: 'Скопируйте вручную:',
@@ -39,6 +44,7 @@ const messages = {
     rainbowOff: 'Радужная тема выключена',
   },
   en: {
+    burst: 'Trigger a burst',
     discordCopy: 'Copy Discord username',
     copied: 'Copied:',
     manual: 'Copy manually:',
@@ -69,6 +75,7 @@ let language = savedLanguage === 'ru' || savedLanguage === 'en'
   ? savedLanguage
   : (navigator.language.toLowerCase().startsWith('en') ? 'en' : 'ru');
 let theme = readPreference('wko-theme') === 'blue' ? 'blue' : 'pink';
+let motionPreference = readPreference('wko-motion');
 let statusTimer;
 
 function applyLanguage() {
@@ -88,6 +95,8 @@ function applyLanguage() {
   langToggle.setAttribute('aria-label', isEnglish ? 'Переключить на русский' : 'Switch to English');
   discordCopy.setAttribute('aria-label', messages[language].discordCopy);
   discordCopy.title = messages[language].discordCopy;
+  portraitButton.setAttribute('aria-label', messages[language].burst);
+  portraitButton.title = messages[language].burst;
 }
 
 function applyTheme() {
@@ -95,6 +104,12 @@ function applyTheme() {
   root.dataset.theme = theme;
   themeToggle.setAttribute('aria-pressed', String(isBlue));
   themeColor.content = isBlue ? '#0b1126' : '#10091b';
+}
+
+function applyMotion() {
+  const enabled = motionPreference === 'on' || (motionPreference !== 'off' && !reducedMotion.matches);
+  root.dataset.motion = enabled ? 'on' : 'off';
+  effectsToggle.setAttribute('aria-pressed', String(enabled));
 }
 
 function showStatus(text) {
@@ -109,6 +124,13 @@ themeToggle.addEventListener('click', () => {
   savePreference('wko-theme', theme);
   applyTheme();
 });
+
+effectsToggle.addEventListener('click', () => {
+  motionPreference = root.dataset.motion === 'on' ? 'off' : 'on';
+  savePreference('wko-motion', motionPreference);
+  applyMotion();
+});
+reducedMotion.addEventListener('change', applyMotion);
 
 langToggle.addEventListener('click', () => {
   language = language === 'ru' ? 'en' : 'ru';
@@ -169,5 +191,6 @@ if (savePreference('wko-views', String(visits))) {
 
 applyTheme();
 applyLanguage();
+applyMotion();
 themeToggle.hidden = false;
 langToggle.hidden = false;
