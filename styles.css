@@ -200,6 +200,10 @@ button {
   background: linear-gradient(135deg, #a4ecff, #5981ff);
 }
 
+[data-theme="blue"] .theme-swatch {
+  background: linear-gradient(135deg, #fface0, #f354b7);
+}
+
 .effects-icon {
   width: 14px;
   height: 14px;
@@ -940,6 +944,16 @@ a.link-card:active {
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+  }
+}
+
+@media (max-width: 375px) {
+  .brand {
+    min-width: 44px;
+  }
+
+  .brand span {
+    display: none;
   }
 }
 

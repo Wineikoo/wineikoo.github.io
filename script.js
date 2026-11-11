@@ -1,5 +1,6 @@
 const root = document.documentElement;
 const themeToggle = document.getElementById('theme-toggle');
+const themeLabel = themeToggle.querySelector('.theme-label');
 const effectsToggle = document.getElementById('effects-toggle');
 const langToggle = document.getElementById('lang-toggle');
 const portraitButton = document.querySelector('.portrait-frame');
@@ -19,10 +20,9 @@ const discordCopy = document.querySelector('[data-copy="discord-name"]');
 const status = document.getElementById('toast');
 
 const english = {
-  intro: 'Developer, streamer, and osu!mania player.',
+  intro: 'Developer, streamer, and osu!standard player.',
   telegram: 'Message me on Telegram',
   copyNick: 'Copy nickname',
-  theme: 'Blue theme',
   effects: 'Effects',
   directory: 'Find me online',
   contact: 'Contacts and code',
@@ -31,11 +31,13 @@ const english = {
   backToTop: 'Back to top',
   visits: 'Visits in this browser:',
   title: 'wineikoo — personal page',
-  description: 'wineikoo — developer, streamer, and osu!mania player. Contacts, streams, videos, and gaming profiles.',
+  description: 'wineikoo — developer, streamer, and osu!standard player. Contacts, streams, videos, and gaming profiles.',
 };
 
 const messages = {
   ru: {
+    blueTheme: 'Синяя тема',
+    pinkTheme: 'Розовая тема',
     burst: 'Запустить вспышку',
     discordCopy: 'Скопировать имя в Discord',
     copied: 'Скопировано:',
@@ -44,6 +46,8 @@ const messages = {
     rainbowOff: 'Радужная тема выключена',
   },
   en: {
+    blueTheme: 'Blue theme',
+    pinkTheme: 'Pink theme',
     burst: 'Trigger a burst',
     discordCopy: 'Copy Discord username',
     copied: 'Copied:',
@@ -78,6 +82,11 @@ let theme = readPreference('wko-theme') === 'blue' ? 'blue' : 'pink';
 let motionPreference = readPreference('wko-motion');
 let statusTimer;
 
+function updateThemeLabel() {
+  const { blueTheme, pinkTheme } = messages[language];
+  themeLabel.textContent = theme === 'blue' ? pinkTheme : blueTheme;
+}
+
 function applyLanguage() {
   const isEnglish = language === 'en';
   root.lang = language;
@@ -97,13 +106,14 @@ function applyLanguage() {
   discordCopy.title = messages[language].discordCopy;
   portraitButton.setAttribute('aria-label', messages[language].burst);
   portraitButton.title = messages[language].burst;
+  updateThemeLabel();
 }
 
 function applyTheme() {
   const isBlue = theme === 'blue';
   root.dataset.theme = theme;
-  themeToggle.setAttribute('aria-pressed', String(isBlue));
   themeColor.content = isBlue ? '#0b1126' : '#10091b';
+  updateThemeLabel();
 }
 
 function applyMotion() {
