@@ -21,9 +21,9 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
   <script src="script.js?v=4" defer></script>
-  <script src="effects.js" defer></script>
+  <script src="effects.js?v=3" defer></script>
 </head>
 <body>
   <div class="sky" aria-hidden="true"></div>
@@ -48,29 +48,32 @@
 
   <main class="shell">
     <section class="hero" aria-labelledby="nickname">
-      <div class="hero-energy" aria-hidden="true"><div class="hero-grid"></div></div>
-      <div class="hero-intro">
-        <h1 id="nickname">wineikoo</h1>
-        <p data-i18n="intro">Разработчик, стример и игрок в osu!standard.</p>
-        <div class="hero-actions">
-          <a class="action action-primary" href="https://t.me/wineikoo" target="_blank" rel="noopener">
-            <span data-i18n="telegram">Написать в Telegram</span>
-            <span class="icon-arrow" aria-hidden="true"></span>
-          </a>
-          <button class="action action-secondary" type="button" data-copy="nickname" hidden>
-            <span class="icon-copy" aria-hidden="true"></span>
-            <span data-i18n="copyNick">Скопировать ник</span>
-          </button>
-        </div>
-      </div>
+      <h1 id="nickname">wineikoo</h1>
       <div class="hero-art">
+        <div class="hero-energy" aria-hidden="true"><div class="hero-grid"></div></div>
         <div class="portrait">
-          <span class="orbit orbit-pink" aria-hidden="true"><span class="orbit-runner"></span></span>
-          <span class="orbit orbit-blue" aria-hidden="true"><span class="orbit-runner"></span></span>
+          <span class="orbit orbit-pink" aria-hidden="true">
+            <span class="orbit-runner"></span><span class="orbit-flare"></span>
+          </span>
+          <span class="orbit orbit-blue" aria-hidden="true">
+            <span class="orbit-runner"></span><span class="orbit-flare"></span>
+          </span>
           <button class="portrait-frame" type="button" aria-label="Запустить вспышку" title="Запустить вспышку" aria-hidden="true" disabled>
             <img src="assets/avatar.jpg" alt="" width="256" height="256" fetchpriority="high">
           </button>
+          <canvas class="portrait-particles" aria-hidden="true"></canvas>
         </div>
+      </div>
+      <p data-i18n="intro">Разработчик, стример и игрок в&nbsp;osu!standard.</p>
+      <div class="hero-actions">
+        <a class="action action-primary" href="https://t.me/wineikoo" target="_blank" rel="noopener">
+          <span data-i18n="telegram">Написать в Telegram</span>
+          <span class="icon-arrow" aria-hidden="true"></span>
+        </a>
+        <button class="action action-secondary" type="button" data-copy="nickname" hidden>
+          <span class="icon-copy" aria-hidden="true"></span>
+          <span data-i18n="copyNick">Скопировать ник</span>
+        </button>
       </div>
     </section>
 
@@ -81,21 +84,21 @@
           <h3 id="contact-title" data-i18n="contact">Контакты и код</h3>
           <ul role="list">
             <li>
-              <a class="link-card" href="https://t.me/wineikoo" target="_blank" rel="noopener">
-                <span class="platform-icon telegram"><img src="assets/brands/telegram.svg" alt="" width="19" height="19"></span>
+              <a class="link-card" data-platform="telegram" href="https://t.me/wineikoo" target="_blank" rel="noopener">
+                <span class="platform-icon"><img src="assets/brands/telegram.svg" alt="" width="19" height="19"></span>
                 <span class="platform-text"><strong>Telegram</strong><span class="handle">@wineikoo</span></span>
                 <span class="icon-arrow" aria-hidden="true"></span>
               </a>
             </li>
             <li>
-              <a class="link-card" href="https://github.com/wineikoo" target="_blank" rel="noopener">
-                <span class="platform-icon github"><img src="assets/brands/github.svg" alt="" width="19" height="19"></span>
+              <a class="link-card" data-platform="github" href="https://github.com/wineikoo" target="_blank" rel="noopener">
+                <span class="platform-icon"><img src="assets/brands/github.svg" alt="" width="19" height="19"></span>
                 <span class="platform-text"><strong>GitHub</strong><span class="handle">/wineikoo</span></span>
                 <span class="icon-arrow" aria-hidden="true"></span>
               </a>
             </li>
-            <li class="link-card discord-card">
-              <span class="platform-icon discord"><img src="assets/brands/discord.svg" alt="" width="19" height="19"></span>
+            <li class="link-card discord-card" data-platform="discord">
+              <span class="platform-icon"><img src="assets/brands/discord.svg" alt="" width="19" height="19"></span>
               <span class="platform-text"><strong>Discord</strong><span class="handle" id="discord-name">wineikoo</span></span>
               <button class="copy-discord" type="button" data-copy="discord-name" aria-label="Скопировать имя в Discord" hidden>
                 <span class="icon-copy" aria-hidden="true"></span>
@@ -108,15 +111,15 @@
           <h3 id="media-title" data-i18n="media">Стримы и видео</h3>
           <ul role="list">
             <li>
-              <a class="link-card" href="https://www.twitch.tv/wineikoo" target="_blank" rel="noopener">
-                <span class="platform-icon twitch"><img src="assets/brands/twitch.svg" alt="" width="19" height="19"></span>
+              <a class="link-card" data-platform="twitch" href="https://www.twitch.tv/wineikoo" target="_blank" rel="noopener">
+                <span class="platform-icon"><img src="assets/brands/twitch.svg" alt="" width="19" height="19"></span>
                 <span class="platform-text"><strong>Twitch</strong><span class="handle">/wineikoo</span></span>
                 <span class="icon-arrow" aria-hidden="true"></span>
               </a>
             </li>
             <li>
-              <a class="link-card" href="https://www.youtube.com/@Wineikoo" target="_blank" rel="noopener">
-                <span class="platform-icon youtube"><img src="assets/brands/youtube.svg" alt="" width="19" height="19"></span>
+              <a class="link-card" data-platform="youtube" href="https://www.youtube.com/@Wineikoo" target="_blank" rel="noopener">
+                <span class="platform-icon"><img src="assets/brands/youtube.svg" alt="" width="19" height="19"></span>
                 <span class="platform-text"><strong>YouTube</strong><span class="handle">@Wineikoo</span></span>
                 <span class="icon-arrow" aria-hidden="true"></span>
               </a>
@@ -128,22 +131,22 @@
           <h3 id="games-title" data-i18n="games">Игры</h3>
           <ul role="list">
             <li>
-              <a class="link-card" href="https://osu.ppy.sh/users/wineikoo" target="_blank" rel="noopener">
-                <span class="platform-icon osu"><img src="assets/brands/osu.svg" alt="" width="19" height="19"></span>
+              <a class="link-card" data-platform="osu" href="https://osu.ppy.sh/users/wineikoo" target="_blank" rel="noopener">
+                <span class="platform-icon"><img src="assets/brands/osu.svg" alt="" width="19" height="19"></span>
                 <span class="platform-text"><strong>osu!</strong><span class="handle">/wineikoo</span></span>
                 <span class="icon-arrow" aria-hidden="true"></span>
               </a>
             </li>
             <li>
-              <a class="link-card" href="https://steamcommunity.com/id/AkameLaKill/" target="_blank" rel="noopener">
-                <span class="platform-icon steam"><img src="assets/brands/steam.svg" alt="" width="19" height="19"></span>
+              <a class="link-card" data-platform="steam" href="https://steamcommunity.com/id/AkameLaKill/" target="_blank" rel="noopener">
+                <span class="platform-icon"><img src="assets/brands/steam.svg" alt="" width="19" height="19"></span>
                 <span class="platform-text"><strong>Steam</strong><span class="handle">/AkameLaKill</span></span>
                 <span class="icon-arrow" aria-hidden="true"></span>
               </a>
             </li>
             <li>
-              <a class="link-card" href="https://www.faceit.com/ru/players/-Haydman_" target="_blank" rel="noopener">
-                <span class="platform-icon faceit"><img src="assets/brands/faceit.svg" alt="" width="19" height="19"></span>
+              <a class="link-card" data-platform="faceit" href="https://www.faceit.com/ru/players/-Haydman_" target="_blank" rel="noopener">
+                <span class="platform-icon"><img src="assets/brands/faceit.svg" alt="" width="19" height="19"></span>
                 <span class="platform-text"><strong>FACEIT</strong><span class="handle">/-Haydman_</span></span>
                 <span class="icon-arrow" aria-hidden="true"></span>
               </a>

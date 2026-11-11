@@ -3,8 +3,10 @@
   const hero = document.querySelector('.hero');
   const directory = document.querySelector('.directory');
   const canvas = document.querySelector('.particles');
+  const portraitCanvas = document.querySelector('.portrait-particles');
   const portrait = document.querySelector('.portrait-frame');
   const portraitImage = portrait.querySelector('img');
+  const orbitFlares = [...hero.querySelectorAll('.orbit-flare')];
   const effectsButton = document.getElementById('effects-toggle');
 
   effectsButton.hidden = false;
@@ -31,7 +33,8 @@
   }
 
   const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+  const portraitCtx = portraitCanvas.getContext('2d');
+  if (!ctx || !portraitCtx) return;
 
   const turn = Math.PI * 2;
   const palettes = {
@@ -45,11 +48,13 @@
   let width = 1;
   let height = 1;
   let stars = [];
-  const sparks = [];
-  const rings = [];
+  const screenEffects = { sparks: [], rings: [] };
+  const portraitEffects = { sparks: [], rings: [] };
+  let portraitWidth = 0;
+  let portraitHeight = 0;
   let previousPointer;
   let pointerGlow;
-  let portraitPulse;
+  let portraitAnimations = [];
   let frame = 0;
   let previousTime = 0;
   let elapsed = 0;
@@ -77,7 +82,7 @@
     glows = colors.map(makeGlow);
     if (next === 'rainbow' && running) {
       if (hero.hasAttribute('data-outside')) {
-        burst(width * .5, height * .44, 54, 420);
+        burst(screenEffects, width * .5, height * .44, 54, 420);
       } else {
         burstPortrait();
       }
@@ -94,6 +99,13 @@
     canvas.height = Math.max(1, Math.round(height * scale));
     ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
 
+    portraitWidth = Math.max(1, portraitCanvas.clientWidth);
+    portraitHeight = Math.max(1, portraitCanvas.clientHeight);
+    portraitCanvas.width = Math.round(portraitWidth * scale);
+    portraitCanvas.height = Math.round(portraitHeight * scale);
+    portraitCtx.setTransform(portraitCanvas.width / portraitWidth, 0, 0, portraitCanvas.height / portraitHeight, 0, 0);
+    clearBurst(portraitEffects);
+
     const count = Math.min(125, Math.max(38, Math.round(width * height / 10200)));
     stars = Array.from({ length: count }, (_, index) => ({
       x: Math.random() * width,
@@ -105,9 +117,9 @@
     }));
   }
 
-  function glow(x, y, size, alpha, color) {
-    ctx.globalAlpha = alpha;
-    ctx.drawImage(glows[color % glows.length], x - size / 2, y - size / 2, size, size);
+  function glow(context, x, y, size, alpha, color) {
+    context.globalAlpha = alpha;
+    context.drawImage(glows[color % glows.length], x - size / 2, y - size / 2, size, size);
   }
 
   function drawStars(delta) {
@@ -118,7 +130,7 @@
       if (star.x < -12) star.x += width + 24;
 
       const alpha = .31 + .23 * Math.sin(elapsed * 2.2 + star.phase);
-      if (star.radius > 1.38) glow(star.x, star.y, 12 + star.radius * 5, alpha, star.color);
+      if (star.radius > 1.38) glow(ctx, star.x, star.y, 12 + star.radius * 5, alpha, star.color);
       ctx.globalAlpha = alpha + .12;
       ctx.fillStyle = colors[star.color];
       ctx.fillRect(star.x, star.y, star.radius, star.radius);
@@ -144,28 +156,28 @@
     ctx.moveTo(x, y);
     ctx.lineTo(x + tail, y - tail * .58);
     ctx.stroke();
-    glow(x, y, 30, alpha, color);
+    glow(ctx, x, y, 30, alpha, color);
   }
 
-  function addSpark(x, y, vx, vy, life, color, size, drag, gravity) {
+  function addSpark(sparks, x, y, vx, vy, life, color, size, drag, gravity) {
     sparks.push({ x, y, vx, vy, life, maxLife: life, color, size, drag, gravity });
   }
 
-  function burst(x, y, count, speed) {
+  function burst({ sparks, rings }, x, y, count, speed, radiusScale = 1) {
     const isLarge = count > 30;
-    rings.push({ x, y, age: 0, life: isLarge ? .84 : .53, radius: isLarge ? 270 : 108, color: 0 });
-    rings.push({ x, y, age: -.075, life: isLarge ? .92 : .58, radius: isLarge ? 208 : 78, color: 2 });
+    rings.push({ x, y, age: 0, life: isLarge ? .84 : .53, radius: (isLarge ? 270 : 108) * radiusScale, color: 0 });
+    rings.push({ x, y, age: -.075, life: isLarge ? .92 : .58, radius: (isLarge ? 208 : 78) * radiusScale, color: 2 });
     if (rings.length > 14) rings.splice(0, rings.length - 14);
 
     for (let index = 0; index < count; index += 1) {
       const angle = (index + Math.random() * .8) / count * turn;
       const velocity = speed * (.35 + Math.random() * .65);
-      addSpark(x, y, Math.cos(angle) * velocity, Math.sin(angle) * velocity,
+      addSpark(sparks, x, y, Math.cos(angle) * velocity, Math.sin(angle) * velocity,
         .36 + Math.random() * .54, index % colors.length, 1 + Math.random() * 1.8, 1.9, 105);
     }
   }
 
-  function drawRings(delta) {
+  function drawRings(context, rings, delta) {
     let live = 0;
     for (const ring of rings) {
       ring.age += delta;
@@ -175,20 +187,20 @@
       if (progress < 0) continue;
 
       const radius = 8 + ring.radius * (1 - (1 - progress) ** 3);
-      ctx.beginPath();
-      ctx.arc(ring.x, ring.y, radius, 0, turn);
-      ctx.strokeStyle = colors[ring.color];
-      ctx.globalAlpha = (1 - progress) ** 2 * .18;
-      ctx.lineWidth = 8;
-      ctx.stroke();
-      ctx.globalAlpha *= 3.8;
-      ctx.lineWidth = 1.4;
-      ctx.stroke();
+      context.beginPath();
+      context.arc(ring.x, ring.y, radius, 0, turn);
+      context.strokeStyle = colors[ring.color];
+      context.globalAlpha = (1 - progress) ** 2 * .18;
+      context.lineWidth = 8;
+      context.stroke();
+      context.globalAlpha *= 3.8;
+      context.lineWidth = 1.4;
+      context.stroke();
     }
     rings.length = live;
   }
 
-  function drawSparks(delta) {
+  function drawSparks(context, sparks, delta) {
     if (sparks.length > 220) sparks.splice(0, sparks.length - 220);
     let live = 0;
     for (const spark of sparks) {
@@ -202,14 +214,14 @@
       spark.y += spark.vy * delta;
 
       const alpha = (spark.life / spark.maxLife) ** 1.5;
-      ctx.globalAlpha = alpha;
-      ctx.lineWidth = spark.size;
-      ctx.strokeStyle = colors[spark.color % colors.length];
-      ctx.beginPath();
-      ctx.moveTo(spark.x - spark.vx * .046, spark.y - spark.vy * .046);
-      ctx.lineTo(spark.x, spark.y);
-      ctx.stroke();
-      glow(spark.x, spark.y, 8 + spark.size * 4, alpha, spark.color);
+      context.globalAlpha = alpha;
+      context.lineWidth = spark.size;
+      context.strokeStyle = colors[spark.color % colors.length];
+      context.beginPath();
+      context.moveTo(spark.x - spark.vx * .046, spark.y - spark.vy * .046);
+      context.lineTo(spark.x, spark.y);
+      context.stroke();
+      glow(context, spark.x, spark.y, 8 + spark.size * 4, alpha, spark.color);
     }
     sparks.length = live;
   }
@@ -230,13 +242,21 @@
       pointerGlow.x = x + (targetX - x) * follow;
       pointerGlow.y = y + (targetY - y) * follow;
       pointerGlow.life = Math.max(0, life - delta * 1.3);
-      if (pointerGlow.life > 0) glow(pointerGlow.x, pointerGlow.y, 190, pointerGlow.life * .30, 0);
+      if (pointerGlow.life > 0) glow(ctx, pointerGlow.x, pointerGlow.y, 190, pointerGlow.life * .30, 0);
       else pointerGlow = null;
     }
 
-    drawRings(delta);
-    drawSparks(delta);
+    drawRings(ctx, screenEffects.rings, delta);
+    drawSparks(ctx, screenEffects.sparks, delta);
     ctx.globalAlpha = 1;
+
+    if (portraitEffects.rings.length || portraitEffects.sparks.length) {
+      portraitCtx.clearRect(0, 0, portraitWidth, portraitHeight);
+      drawRings(portraitCtx, portraitEffects.rings, delta);
+      drawSparks(portraitCtx, portraitEffects.sparks, delta);
+      portraitCtx.globalAlpha = 1;
+    }
+
     frame = requestAnimationFrame(render);
   }
 
@@ -254,22 +274,46 @@
       frame = requestAnimationFrame(render);
     } else {
       cancelAnimationFrame(frame);
-      sparks.length = 0;
-      rings.length = 0;
+      clearBurst(screenEffects);
+      clearBurst(portraitEffects);
+      portraitCtx.clearRect(0, 0, portraitWidth, portraitHeight);
       pointerGlow = previousPointer = null;
-      portraitPulse?.cancel();
+      stopPortraitAnimations();
     }
   }
 
+  function clearBurst({ sparks, rings }) {
+    sparks.length = 0;
+    rings.length = 0;
+  }
+
+  function stopPortraitAnimations() {
+    for (const animation of portraitAnimations) animation.cancel();
+    portraitAnimations = [];
+  }
+
   function burstPortrait() {
-    const bounds = portrait.getBoundingClientRect();
-    burst(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, 56, 470);
-    portraitPulse?.cancel();
-    portraitPulse = portraitImage.animate?.([
-      { transform: 'scale(.95)', offset: 0 },
-      { transform: 'scale(1.085)', offset: .30 },
-      { transform: 'scale(1)', offset: 1 },
-    ], { duration: 580, easing: 'cubic-bezier(.23, 1, .32, 1)' });
+    const scale = Math.min(1, portraitHeight / 285);
+    burst(portraitEffects, portraitWidth / 2, portraitHeight / 2, 56, 440 * scale, .78 * scale);
+    if (!portraitImage.animate) return;
+    stopPortraitAnimations();
+    portraitAnimations = [
+      portraitImage.animate([
+        { transform: 'scale(.95)', offset: 0 },
+        { transform: 'scale(1.085)', offset: .30 },
+        { transform: 'scale(1)', offset: 1 },
+      ], { duration: 580, easing: 'cubic-bezier(.23, 1, .32, 1)' }),
+      ...orbitFlares.map((flare, index) => {
+        const start = index ? 142 : -24;
+        const direction = index ? -1 : 1;
+        return flare.animate([
+          { opacity: .1, transform: `rotate(${start}deg)` },
+          { opacity: 1, transform: `rotate(${start + direction * 70}deg)`, offset: .18 },
+          { opacity: .9, transform: `rotate(${start + direction * 240}deg)`, offset: .68 },
+          { opacity: 0, transform: `rotate(${start + direction * 360}deg)` },
+        ], { duration: 700 + 140 * index, delay: 42 * index });
+      }),
+    ];
   }
 
   function leavePointer() {
@@ -293,7 +337,7 @@
       const count = Math.min(7, Math.floor(distance / 10));
       for (let index = 0; index < count; index += 1) {
         const point = index / count;
-        addSpark(x - dx * point, y - dy * point,
+        addSpark(screenEffects.sparks, x - dx * point, y - dy * point,
           -dx / distance * 36 + (Math.random() - .5) * 64,
           -dy / distance * 36 + (Math.random() - .5) * 64,
           .34 + Math.random() * .29, Math.floor(Math.random() * colors.length), 1.1 + Math.random(), 1.2, 45);
@@ -304,7 +348,7 @@
 
   window.addEventListener('pointerdown', (event) => {
     if (!running || !event.isPrimary || event.button !== 0 || portrait.contains(event.target)) return;
-    burst(event.clientX, event.clientY, 23, 290);
+    burst(screenEffects, event.clientX, event.clientY, 23, 290);
   }, { passive: true });
 
   portrait.addEventListener('click', () => {

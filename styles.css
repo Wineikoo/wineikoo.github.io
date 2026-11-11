@@ -223,28 +223,39 @@ button {
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  grid-template:
+    ".           art" 1fr
+    "title       art" auto
+    "description art" auto
+    "actions     art" auto
+    ".           art" 1fr
+    / minmax(0, 1.45fr) minmax(0, 1fr);
   align-items: center;
   min-height: 420px;
   padding: clamp(30px, 5.2vw, 74px);
   overflow: clip;
   isolation: isolate;
-  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--page));
   border-radius: 30px;
   background:
-    radial-gradient(ellipse at 13% 47%, var(--hero-base) 0, transparent 64%),
-    radial-gradient(ellipse at 91% 4%, var(--mesh-pink), transparent 58%),
-    radial-gradient(ellipse at 80% 113%, color-mix(in srgb, var(--mesh-cyan) 48%, transparent), transparent 50%),
-    radial-gradient(ellipse at 69% 69%, var(--mesh-violet), transparent 78%),
-    var(--hero-base);
+    radial-gradient(ellipse at 76% 51%, color-mix(in srgb, var(--mesh-pink) 40%, transparent), transparent 52%),
+    linear-gradient(117deg, var(--page) -10%, var(--hero-base) 70%, var(--page));
+  box-shadow: inset 0 1px 0 #fff1, 0 22px 65px #07020b66;
 }
 
 .hero-energy {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  width: min(153%, 645px);
+  aspect-ratio: 1;
+  translate: -50% -50%;
   overflow: clip;
   pointer-events: none;
-  mask-image: linear-gradient(100deg, transparent 5%, #0005 44%, #000 77%);
+  mask-image: radial-gradient(#000 30%, #000c 48%, transparent 71%);
+  background:
+    radial-gradient(ellipse at 43% 37%, color-mix(in srgb, var(--rim) 55%, transparent), transparent 41%),
+    radial-gradient(ellipse at 60% 65%, color-mix(in srgb, var(--mesh-cyan) 35%, transparent), transparent 44%);
 }
 
 .hero-energy::before,
@@ -255,18 +266,18 @@ button {
 }
 
 .hero-energy::before {
-  inset: -46% -12% -48% 25%;
-  opacity: .9;
+  inset: 4%;
+  opacity: .76;
   background: conic-gradient(
     from 115deg at 54% 49%, transparent 0 5%, var(--mesh-cyan) 13%, transparent 25% 36%,
     var(--rim) 49%, transparent 60% 68%, var(--mesh-violet) 79%, transparent 91% 100%
   );
-  filter: blur(24px);
+  filter: blur(21px);
   transform: rotate(-16deg) scaleY(.8);
 }
 
 .hero-energy::after {
-  inset: -50% -23% -44% 26%;
+  inset: -8%;
   opacity: .68;
   background: repeating-radial-gradient(
     ellipse at 55% 47%, transparent 0 7%, color-mix(in srgb, var(--accent) 80%, transparent) 8%,
@@ -285,7 +296,7 @@ button {
 .hero-grid {
   position: absolute;
   inset: 24% -35% -76% -35%;
-  opacity: .33;
+  opacity: .26;
   background:
     repeating-linear-gradient(0deg, transparent 0 37px, color-mix(in srgb, var(--accent) 54%, transparent) 39px 40px),
     repeating-linear-gradient(90deg, transparent 0 52px, color-mix(in srgb, var(--accent) 38%, transparent) 53px 54px);
@@ -293,22 +304,24 @@ button {
   transform: perspective(440px) rotateX(54deg) rotateZ(-10deg) translateY(0);
 }
 
-.hero-intro {
+.hero > :is(h1, p, .hero-actions) {
   position: relative;
   z-index: 1;
 }
 
 .hero h1 {
+  grid-area: title;
   margin: 0;
-  font-size: clamp(3.25rem, 9.4vw, 8.5rem);
+  font-size: clamp(3.25rem, 9.1vw, 8.1rem);
   font-weight: 800;
-  letter-spacing: -.072em;
+  letter-spacing: -.044em;
   line-height: .94;
   color: var(--text);
   text-shadow: 0 0 36px color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 .hero p {
+  grid-area: description;
   max-width: 28ch;
   margin: 24px 0 0;
   color: #f1deff;
@@ -318,6 +331,7 @@ button {
 }
 
 .hero-actions {
+  grid-area: actions;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -344,6 +358,8 @@ button {
 
 .hero-art {
   position: relative;
+  grid-area: art;
+  align-self: stretch;
   display: grid;
   place-items: center;
   min-width: 0;
@@ -355,6 +371,23 @@ button {
   place-items: center;
   width: clamp(162px, 21vw, 286px);
   aspect-ratio: 1;
+}
+
+.portrait-particles {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: 168%;
+  height: 100%;
+  translate: -50% -50%;
+  display: none;
+  mask-image: radial-gradient(ellipse at center, #000 37%, #000d 55%, transparent 71%);
+  pointer-events: none;
+}
+
+[data-motion="on"] .portrait-particles {
+  display: block;
 }
 
 .orbit {
@@ -381,6 +414,15 @@ button {
   inset: -3px;
   border-radius: 50%;
   transform: rotate(60deg);
+}
+
+.orbit-flare {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: conic-gradient(from -98deg, transparent 5%, currentColor 21%, white 26%, transparent 28% 100%);
+  mask-image: radial-gradient(transparent 66%, #000 68% 71%, transparent 72%);
+  opacity: 0;
 }
 
 .orbit-runner::before {
@@ -490,15 +532,42 @@ button {
 }
 
 .link-card {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: 38px minmax(0, 1fr) 24px;
   align-items: center;
   gap: 12px;
   min-height: 69px;
   padding: 9px 12px;
-  border: 1px solid var(--border);
+  border: 1px solid color-mix(in srgb, var(--card-accent) 23%, var(--border));
   border-radius: 13px;
-  background: var(--surface);
+  background:
+    radial-gradient(ellipse at 0 0, color-mix(in srgb, var(--card-accent) 17%, transparent), transparent 66%),
+    var(--surface);
+}
+
+.link-card::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(111deg, color-mix(in srgb, var(--card-accent) 22%, transparent), transparent 67%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+:is(a.link-card:focus-visible, .discord-card:focus-within) {
+  border-color: var(--card-accent);
+}
+
+:is(a.link-card:focus-visible, .discord-card:focus-within)::before {
+  opacity: 1;
+}
+
+a.link-card:focus-visible > .icon-arrow {
+  color: var(--card-accent);
 }
 
 .discord-card {
@@ -512,17 +581,17 @@ button {
   height: 38px;
   place-items: center;
   border-radius: 10px;
-  background: var(--icon-bg);
+  background: color-mix(in srgb, var(--card-accent) 37%, #130e21);
 }
 
-.telegram { --icon-bg: #165674; }
-.github { --icon-bg: #40324e; }
-.discord { --icon-bg: #434489; }
-.twitch { --icon-bg: #542782; }
-.youtube { --icon-bg: #7c2747; }
-.osu { --icon-bg: #813c68; }
-.steam { --icon-bg: #2b476c; }
-.faceit { --icon-bg: #783d32; }
+[data-platform="telegram"] { --card-accent: #64d9ff; }
+[data-platform="github"] { --card-accent: #c8a7e8; }
+[data-platform="discord"] { --card-accent: #9299ff; }
+[data-platform="twitch"] { --card-accent: #ba8aff; }
+[data-platform="youtube"] { --card-accent: #ff668e; }
+[data-platform="osu"] { --card-accent: #ff9bc9; }
+[data-platform="steam"] { --card-accent: #82b9ff; }
+[data-platform="faceit"] { --card-accent: #ff9465; }
 
 .platform-text {
   display: grid;
@@ -786,17 +855,33 @@ a.link-card:active {
 
 @media (hover: hover) and (pointer: fine) {
   .preference:hover,
-  .copy-discord:hover,
-  a.link-card:hover {
+  .copy-discord:hover {
     border-color: var(--accent);
     background: var(--surface-hover);
   }
 
-  a.link-card {
-    transition: border-color 150ms ease, background-color 150ms ease, transform 120ms var(--ease-out);
+  a.link-card:hover,
+  .discord-card:hover {
+    border-color: var(--card-accent);
   }
 
-  a.link-card:hover .icon-arrow,
+  a.link-card:hover::before,
+  .discord-card:hover::before {
+    opacity: 1;
+  }
+
+  [data-motion="on"] .link-card {
+    transition: border-color 160ms ease, transform 120ms var(--ease-out);
+  }
+
+  [data-motion="on"] .link-card::before {
+    transition: opacity 160ms ease;
+  }
+
+  a.link-card:hover .icon-arrow {
+    color: var(--card-accent);
+  }
+
   .copy-discord:hover,
   .back-to-top:hover {
     color: var(--accent);
@@ -811,7 +896,6 @@ a.link-card:active {
   }
 
   [data-motion="on"] a.link-card {
-    position: relative;
     overflow: hidden;
   }
 
@@ -819,14 +903,10 @@ a.link-card:active {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(112deg, transparent 26%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 71%);
+    background: linear-gradient(112deg, transparent 26%, color-mix(in srgb, var(--card-accent) 22%, transparent), transparent 71%);
     transform: translateX(-105%);
     transition: transform 280ms var(--ease-out);
     pointer-events: none;
-  }
-
-  [data-motion="on"] a.link-card:hover:not(:active) {
-    transform: translateY(-4px) scale(1.012);
   }
 
   [data-motion="on"] a.link-card:hover::after {
@@ -875,41 +955,40 @@ a.link-card:active {
   }
 
   .hero {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
+    grid-template: "title" "art" "description" "actions" / minmax(0, 1fr);
+    justify-items: center;
     min-height: 0;
-    padding: 36px 17px;
+    padding: 29px 17px 27px;
     border-radius: 24px;
     text-align: center;
     background:
-      radial-gradient(ellipse at 0 18%, var(--hero-base), transparent 75%),
-      radial-gradient(ellipse at 104% 48%, var(--mesh-pink), transparent 67%),
-      radial-gradient(ellipse at 26% 103%, color-mix(in srgb, var(--mesh-cyan) 40%, transparent), transparent 48%),
-      radial-gradient(ellipse at 69% 95%, var(--mesh-violet), transparent 80%),
-      var(--hero-base);
+      radial-gradient(ellipse at 50% 42%, color-mix(in srgb, var(--mesh-pink) 40%, transparent), transparent 58%),
+      linear-gradient(var(--page), var(--hero-base) 60%, var(--page));
   }
 
   .hero h1 {
-    font-size: clamp(3.15rem, 13.8vw, 5.5rem);
-    letter-spacing: -.065em;
+    font-size: clamp(3.15rem, 14vw, 5.5rem);
   }
 
   .hero-energy {
-    mask-image: linear-gradient(transparent 15%, #0004 42%, #000 75%);
+    width: min(125%, 475px);
+    mask-image: radial-gradient(#000 30%, #000c 48%, transparent 71%),
+      linear-gradient(#000 51%, #000c 58%, transparent 70%);
+    mask-composite: intersect;
   }
 
-  .hero-energy::before,
-  .hero-energy::after {
-    inset: 26% -55% -48%;
+  .hero-art {
+    width: 100%;
+    margin-top: 17px;
   }
 
   .hero p {
-    margin: 17px auto 0;
+    margin: 13px auto 0;
   }
 
   .hero-actions {
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 18px;
   }
 
   .action {
@@ -918,7 +997,7 @@ a.link-card:active {
   }
 
   .portrait {
-    width: clamp(138px, 36vw, 196px);
+    width: clamp(149px, 44vw, 224px);
   }
 
   .directory {
@@ -932,6 +1011,12 @@ a.link-card:active {
 }
 
 @media (max-width: 490px) {
+  .hero-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: min(100%, 220px);
+  }
+
   .preference {
     min-width: 44px;
   }
