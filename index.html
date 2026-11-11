@@ -21,11 +21,9 @@
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=3">
-  <link rel="stylesheet" href="rhythm.css">
-  <script src="script.js?v=3" defer></script>
-  <script src="effects.js?v=2" defer></script>
-  <script src="rhythm.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=2">
+  <script src="script.js?v=2" defer></script>
+  <script src="effects.js" defer></script>
 </head>
 <body>
   <div class="sky" aria-hidden="true"></div>
@@ -73,11 +71,6 @@
             <img src="assets/avatar.jpg" alt="" width="256" height="256" fetchpriority="high">
           </button>
         </div>
-        <button class="rhythm-launch" id="rhythm-launch" type="button" aria-haspopup="dialog" aria-controls="rhythm" hidden>
-          <span class="rhythm-glyph" aria-hidden="true"></span>
-          <span data-i18n="play">Сыграть</span>
-          <span class="icon-arrow" aria-hidden="true"></span>
-        </button>
       </div>
     </section>
 
@@ -168,54 +161,6 @@
     </a>
     <span id="visits" hidden><span data-i18n="visits">Открытий в этом браузере:</span> <strong id="visit-count"></strong></span>
   </footer>
-
-  <dialog class="rhythm" id="rhythm" aria-labelledby="rhythm-title" aria-describedby="rhythm-prompt-text">
-    <header class="rhythm-header">
-      <div>
-        <h2 id="rhythm-title">Neon Pulse</h2>
-        <p data-i18n="rhythmTrack">Ритм-игра · 144 BPM · 22 сек</p>
-      </div>
-      <div class="rhythm-controls">
-        <button class="rhythm-control" id="rhythm-mute" type="button" aria-pressed="false">
-          <span class="sound-icon" aria-hidden="true"></span>
-          <span class="rhythm-sr" data-i18n="rhythmMute">Без звука</span>
-        </button>
-        <form method="dialog">
-          <button class="rhythm-control" type="submit">
-            <span class="close-icon" aria-hidden="true"></span>
-            <span class="rhythm-sr" data-i18n="rhythmClose">Закрыть игру</span>
-          </button>
-        </form>
-      </div>
-    </header>
-
-    <dl class="rhythm-hud">
-      <div><dt data-i18n="rhythmScore">Очки</dt><dd id="rhythm-score">0</dd></div>
-      <div><dt data-i18n="rhythmCombo">Комбо</dt><dd id="rhythm-combo">×0</dd></div>
-      <div><dt data-i18n="rhythmBest">Рекорд</dt><dd id="rhythm-best">0</dd></div>
-    </dl>
-    <div class="rhythm-progress" aria-hidden="true"><span></span></div>
-
-    <div class="rhythm-board">
-      <div class="rhythm-lanes" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-      <canvas class="rhythm-canvas" aria-hidden="true"></canvas>
-      <div class="rhythm-prompt" id="rhythm-prompt">
-        <div class="rhythm-prompt-content">
-          <h3 id="rhythm-prompt-title">Поймай ритм</h3>
-          <p id="rhythm-prompt-text">Жми D, F, J, K или тапай по кнопкам, когда ноты доходят до линии.</p>
-          <button class="rhythm-start" id="rhythm-start" type="button" autofocus>Начать раунд</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="rhythm-pads">
-      <button type="button" disabled>D</button>
-      <button type="button" disabled>F</button>
-      <button type="button" disabled>J</button>
-      <button type="button" disabled>K</button>
-    </div>
-    <audio id="rhythm-audio" src="assets/neon-pulse.mp3" preload="none"></audio>
-  </dialog>
 
   <div class="toast" id="toast" role="status" aria-atomic="true"></div>
 
