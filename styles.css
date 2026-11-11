@@ -723,6 +723,9 @@ button {
 }
 
 [data-motion="on"].motion-paused .sky::before,
+[data-motion="on"].motion-paused :is(.hero-energy, .portrait-frame)::before,
+[data-motion="on"].motion-paused .hero-energy::after,
+[data-motion="on"].motion-paused :is(.hero-grid, .portrait, .orbit-runner),
 [data-motion="on"] .hero[data-outside] :is(.hero-energy, .portrait-frame)::before,
 [data-motion="on"] .hero[data-outside] .hero-energy::after,
 [data-motion="on"] .hero[data-outside] :is(.hero-grid, .portrait, .orbit-runner) {

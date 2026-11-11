@@ -244,8 +244,9 @@
     const enabled = page.dataset.motion === 'on';
     portrait.disabled = !enabled;
     portrait.setAttribute('aria-hidden', String(!enabled));
-    page.classList.toggle('motion-paused', document.hidden);
-    const next = enabled && !document.hidden;
+    const paused = document.hidden || page.classList.contains('rhythm-open');
+    page.classList.toggle('motion-paused', paused);
+    const next = enabled && !paused;
     if (running === next) return;
     running = next;
     previousTime = 0;
